@@ -292,7 +292,7 @@ uint64_t get_svt_psy_full_dist(const void* s, uint32_t so, uint32_t sp,
     return (uint64_t)(dist * psy_rd);
 }
 
-double get_effective_psy_rd(double psy_rd, bool is_islice, uint8_t temporal_layer_index) {
+double get_hvs_modulation_factor(double psy_rd, bool is_islice, uint8_t temporal_layer_index) {
     if (is_islice) {
         return psy_rd * 0.6;
     } else if (temporal_layer_index == 0) {
