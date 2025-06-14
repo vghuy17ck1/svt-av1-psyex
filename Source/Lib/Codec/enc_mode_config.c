@@ -1266,7 +1266,11 @@ static void svt_aom_set_sg_filter_ctrls(Av1Common *cm, uint8_t sg_filter_lvl) {
 static uint8_t svt_aom_get_wn_filter_level(EncMode enc_mode, uint8_t input_resolution, bool is_not_last_layer,
                                            const uint8_t is_base) {
     uint8_t wn_filter_lvl = 0;
-    if (enc_mode <= ENC_M7)
+    //PSY: We fully enable the wiener filter to increase coding gains as much as possible
+    //at P-1 since we only care about 10MB challenges/classical metrics
+    if (enc_mode <= ENC_MR)
+        wn_filter_lvl = 1;
+    else if (enc_mode <= ENC_M7)
         wn_filter_lvl = is_not_last_layer ? 5 : 0;
     else if (enc_mode <= ENC_M8)
         wn_filter_lvl = is_base ? 5 : 0;
