@@ -1,6 +1,9 @@
-# SVT-AV1-PSY
+# An exotic, extended, exciting continuation of SVT-AV1-PSY: SVT-AV1-PSYEX
 
-SVT-AV1-PSY is the Scalable Video Technology for AV1 (SVT-AV1 Encoder and Decoder) with perceptual enhancements for psychovisually optimal AV1 encoding. The goal is to create the best encoding implementation for perceptual quality with AV1.
+Since OG SVT-AV1-PSY was sunset because Gianni couldn't work on it anymore, I decided to build svt-av1-psyex: a way for me and others to develop svt-av1-psy in novel ways to attain the best visual fidelity at all quality levels when performing video compression.
+
+As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended with advanced perceptual improvements, additions and tuning for psychovisually optimal media encoding. The goal is to create the best encoding implementation for perceptual quality with AV1. We may or may not implement bleeding edge features, optimizations and even extend mainline features beyond their intended purpose.
+
 
 ### Feature Additions
 
@@ -12,21 +15,28 @@ Provides control over our augmented AQ Modes 0 and 2 which can utilize variance 
 
 Controls how "selective" the algorithm is when boosting superblocks, based on their low/high 8x8 variance ratio. A value of 1 is the least selective, and will readily boost a superblock if only 1/8th of the superblock is low variance. Conversely, a value of 8 will only boost if the *entire* superblock is low variance. Lower values increase bitrate. The default value is 6.
 
-- `--enable-alt-curve` *0 and 1* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
+- `--variance-boost-cruve` *0 to 1* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
 
 Enable an alternative variance boost curve, with different bit allocation and visual characteristics. The default is 0.
+A 3rd curve `--variance-boost-curve 2` will be added in the next release for HDR content.
 
 - `Presets -2 & -3`
 
-Terrifically slow encoding modes for research purposes.
+Terrifically slow encoding modes for research purposes, as well as extremely low filesize challenges.
+
+- `Enhanced Tune 0`
+
+Using the knowledge gained from the Tune 3 implementation, we greatly enhanced tune 0 to the point that it's become the favored tune for high fidelity video encoding, including demanding anime content.
+Further updates on related options will be added to push tune 0 into a different direction for less demanding animu content, since many have asked for less... aggressive tuning.
 
 - `Tune 3`
 
-A new tune based on Tune 2 (SSIM) called SSIM with Subjective Quality Tuning. Generally harms metric performance in exchange for better visual fidelity.
+A new tune based on Tune 2 (SSIM) called SSIM with Subjective Quality Tuning. Generally harms metric performance in exchange for better visual fidelity with the SSIM+SSIM-RD tuning.
+
 
 - `Tune 4` (**[Ported to libaom](https://aomedia.googlesource.com/aom/+/refs/tags/v3.12.0)**)
 
-Another new tune based on Tune 2 (SSIM) called Still Picture. Optimized for still images based on SSIMULACRA2 performance on the CID22 Validation test set. Not recommended for use outside of all-intra encoding.
+Another new tune based on Tune 2 (SSIM) called Still Picture. Optimized for still images based on SSIMULACRA2 performance on the CID22 Validation test set. Not recommended for use outside of all-intra (image) encoding
 
 - `--sharpness` *0 to 7* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2346)**)
 
@@ -54,14 +64,16 @@ Increases video quality temporal consistency, especially with clips that contain
 
 - `--enable-dlf 2`
 
-Enables a more accurate loop filter that prevents blocking, for a modest increase in compute time (most noticeable at presets 7 to 9)
+Enables a more accurate loop filter that prevents blocking, for a modest increase in compute time (most noticeable at presets 7 to 9).
+This stops being useful at **Preset 3**.
 
 - `Higher-quality presets for 8K and 16K`
 
 Lowers the minimum available preset from 8 to 2 for higher-quality 8K and 16K encoding (64 GB of RAM recommended per encoding instance).
 
-- `--frame-luma-bias` *0 to 100* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2348)**)
+- `--luminance-qp-bias` *0 to 100* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2348)**)
 
+It was known before as `--frame-luma-bias`
 Enables frame-level luma bias to improve quality in dark scenes by adjusting frame-level QP based on average luminance across each frame
 
 - `--max-32-tx-size` *0 and 1*
