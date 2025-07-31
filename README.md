@@ -1,10 +1,21 @@
 # An exotic, extended, exciting continuation of SVT-AV1-PSY: SVT-AV1-PSYEX
 
-Since OG SVT-AV1-PSY was sunset because Gianni couldn't work on it anymore, I decided to build svt-av1-psyex: a way for me and others to develop svt-av1-psy in novel ways to attain the best visual fidelity at all quality levels when performing video compression.
+Since the original SVT-AV1-PSY project was sunset because Gianni couldn't work on it anymore, I decided to build svt-av1-psyex: a way for me and others to develop svt-av1-psy in novel ways to attain the best visual fidelity at all quality levels when performing video compression.
 
 As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended with advanced perceptual improvements, additions and tuning for psychovisually optimal media encoding. The goal is to create the best encoding implementation for perceptual quality with AV1. We may or may not implement bleeding edge features, optimizations and even extend mainline features beyond their intended purpose.
 
 # For HDR content, I recommend using SVT-AV1-HDR for now: https://github.com/juliobbv-p/svt-av1-hdr/
+
+
+### Recommended general settings for 3 use cases 
+
+To be filled once I come back from doing groceries and getting my competent soldering iron station
+
+- `High Fidelity (Demanding content, higher bitrates for live-action/CG/demanding animu)`
+
+- `Medium Fidelity (Less demanding content, medium bitrates)`
+
+- `High appeal (low bitrates, line preservation, sacrificing some high frequency detail)`
 
 ### Feature Additions
 
@@ -180,6 +191,13 @@ When using psy-rd on slower presets, Preset 6 and slower, it is heavily recommen
 It is not recommended to set `--complex-hvs 1` on presets faster than 6.
 
 Default is **0**.
+
+`--filtering-noise-detection`
+
+This setting controls the noise detection algorithm that turns off CDEF/restoration filtering if the noise level is high enough; this feature is enabled by default
+if you use tune 0/tune 3. By popular request, a member of our community has decided to add this setting to improve visual appeal on less demanding content.
+
+The default is 0, which follows default tuning decisions.
 
 
 ### Modified Defaults
