@@ -1004,8 +1004,8 @@ typedef struct EbSvtAv1EncConfiguration {
     /**
      * @brief Enable psychovisual rate distortion
      * 0.00: disable PSY-RD
-     * 4.00: enable PSY-RD with a strength of 4.00
-     * Default is 0.00.
+     * 6.00: enable PSY-RD with a strength of 4.00
+     * Default is 1.0.
      */
      double psy_rd;
 

@@ -1072,7 +1072,7 @@ EbErrorType svt_av1_set_default_params(EbSvtAv1EncConfiguration *config_ptr) {
 
     // Quant Matrices (QM)
     config_ptr->enable_qm    = 1;
-    config_ptr->min_qm_level = 2;
+    config_ptr->min_qm_level = 4;
     config_ptr->max_qm_level = 15;
     config_ptr->min_chroma_qm_level = 8;
     config_ptr->max_chroma_qm_level = 15;
@@ -1100,7 +1100,7 @@ EbErrorType svt_av1_set_default_params(EbSvtAv1EncConfiguration *config_ptr) {
     config_ptr->adaptive_film_grain               = true;
     config_ptr->noise_norm_strength               = 1;
     config_ptr->kf_tf_strength                    = 1;
-    config_ptr->psy_rd                            = 0.5;
+    config_ptr->psy_rd                            = 1.0;
     config_ptr->spy_rd                            = 0;
     config_ptr->low_q_taper                       = 0;
     config_ptr->sharp_tx                          = 1;
