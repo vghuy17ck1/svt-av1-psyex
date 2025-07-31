@@ -4,6 +4,7 @@ Since OG SVT-AV1-PSY was sunset because Gianni couldn't work on it anymore, I de
 
 As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended with advanced perceptual improvements, additions and tuning for psychovisually optimal media encoding. The goal is to create the best encoding implementation for perceptual quality with AV1. We may or may not implement bleeding edge features, optimizations and even extend mainline features beyond their intended purpose.
 
+# For HDR content, I recommend using SVT-AV1-HDR for now: https://github.com/juliobbv-p/svt-av1-hdr/
 
 ### Feature Additions
 
