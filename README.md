@@ -9,16 +9,17 @@ As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended 
 
 - `--variance-boost-strength` *1 to 4* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2195)**)
 
-Provides control over our augmented AQ Modes 0 and 2 which can utilize variance information in each frame for more consistent quality under high/low contrast scenes. Four curve options are provided, and the default is curve 2. 1: mild, 2: gentle, 3: medium, 4: aggressive
+Provides control over our augmented AQ Modes 0 and 2 which can utilize variance information in each frame for more consistent quality under high/low contrast scenes. Four cruve strength options are provided, and the default is strength **2**; 1: mild, 2: gentle, 3: medium, 4: aggressive
 
 - `--variance-octile` *1 to 8* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2195)**)
 
-Controls how "selective" the algorithm is when boosting superblocks, based on their low/high 8x8 variance ratio. A value of 1 is the least selective, and will readily boost a superblock if only 1/8th of the superblock is low variance. Conversely, a value of 8 will only boost if the *entire* superblock is low variance. Lower values increase bitrate. The default value is 6.
+Controls how "selective" the algorithm is when boosting superblocks, based on their low/high 8x8 variance ratio. A value of 1 is the least selective, and will readily boost a superblock if only 1/8th of the superblock is low variance. Conversely, a value of 8 will only boost if the *entire* superblock is low variance. Lower values increase bitrate. 
+The default value is **6**.
 
-- `--variance-boost-cruve` *0 to 1* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
+- `--variance-boost-cruve` *0 to 2* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
 
 Enable an alternative variance boost curve, with different bit allocation and visual characteristics. The default is 0.
-A 3rd curve `--variance-boost-curve 2` will be added in the next release for HDR content.
+A 3rd curve `--variance-boost-curve 3` will be added in the next release for HDR content.
 
 - `Presets -2 & -3`
 
@@ -40,7 +41,8 @@ Another new tune based on Tune 2 (SSIM) called Still Picture. Optimized for stil
 
 - `--sharpness` *0 to 7* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2346)**)
 
-A parameter for modifying loopfilter deblock sharpness and rate distortion to improve visual fidelity. The default is 0 (no sharpness).
+A parameter for modifying loopfilter deblock sharpness and rate distortion to improve visual fidelity. 
+The default is **1** (mild sharpness bias).
 
 - `--dolby-vision-rpu` *path to file*
 
@@ -61,11 +63,13 @@ Provides a more versatile and granular way to set CRF. Range has been expanded t
 - `--qp-scale-compress-strength` *0.0 to 8.0*
 
 Increases video quality temporal consistency, especially with clips that contain film grain and/or contain fast-moving objects.
+The default is **1**, a conservative setting for most content.
 
 - `--enable-dlf 2`
 
 Enables a more accurate loop filter that prevents blocking, for a modest increase in compute time (most noticeable at presets 7 to 9).
 This stops being useful at **Preset 3**.
+The default is **1, which is based on the preset**.
 
 - `Higher-quality presets for 8K and 16K`
 
@@ -74,15 +78,18 @@ Lowers the minimum available preset from 8 to 2 for higher-quality 8K and 16K en
 - `--luminance-qp-bias` *0 to 100* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2348)**)
 
 It was known before as `--frame-luma-bias`
-Enables frame-level luma bias to improve quality in dark scenes by adjusting frame-level QP based on average luminance across each frame
+Enables frame-level luma bias to improve quality in dark scenes by adjusting frame-level QP based on average luminance across each frame.
+The default is **0**.
 
 - `--max-32-tx-size` *0 and 1*
 
 Restricts available transform sizes to a maximum of 32x32 pixels. Can help slightly improve detail retention at high fidelity CRFs.
+The default is **0**.
 
 - `--adaptive-film-grain` *0 and 1* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2347)**)
 
-Adaptively varies the film grain blocksize based on the resolution of the input video. Often greatly improves the consistency of film grain in the output video, reducing grain patterns.
+Adaptively varies the film grain blocksize based on the resolution of the input video. Often greatly improves the consistency of film grain in the output video, reducing grain patterns. 
+The default is **1**, and is the recommended setting.
 
 - `--hdr10plus-json` *path to file*
 
@@ -118,27 +125,77 @@ Adaptively varies temporal filtering strength based on 64x64 block error. This c
 
 - `--psy-rd` *0.0 to 6.0*
 
-Configures psychovisual rate distortion strength to improve perceived quality by measuring and attempting to preserve the visual energy distribution of high-frequency details and textures. The default is 0.
+Configures psychovisual rate distortion strength to improve perceived quality by measuring and attempting to preserve the visual energy distribution of high-frequency details and textures. 
+The default is **1.0**.
 
 - `--spy-rd` *0 to 2*
 
-Configure psychovisually-oriented pathways that bias towards sharpness and detail retention, at the possible expense of increased blocking and banding. The default is 0, with 1 being the most aggressive and 2 being less aggressive.
+Configure psychovisually-oriented pathways that bias towards sharpness and detail retention, at the possible expense of increased blocking and banding. 
+The default is **0**, with 1 being the most aggressive and 2 being less aggressive.
+
+- `--chroma-qm-min` & `--chroma-qm-max` *0 to 15* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2442)**)
+
+This setting controls the minimum & maximum quantization matrices for chroma planes. The defaults are 8 and 15, respectively. These options decouple chroma quantization matrix control from the luma quantization matrix options currently available, allowing for more control over chroma quality.
+
+The default minimum is already good, but we recommend setting `--chroma-qm-min 10` for more challenging content, as the encoder has a bad tendency to choose
+always choose more aggressive chroma quantization matrices.
+
+- `--low-q-taper`
+
+This setting prevents the encoder from choosing extremely low quantizers for blocks/keyframes, tapering off the quantizers chosen below q11; this can greatly increase efficiency at very low CRF. Original explanation: "Low q taper. If macroblocks are boosted below q11, taper the effect"
+Default is **0**.
+
+- `--sharp-tx`
+
+This setting disables conventional transform optimizations to provide a sharper output overall decided entirely by other metrics, like psy-rd. It has the effect of making psy-rd much stronger, which is why it has been made default default. For more appealing output in much less demanding scenarios, you can disable it by setting `--sharp-tx 0`, although it is not recommended for grainy content.
+
+Default is **1**.
+
+- `--hbd-mds`
+
+This setting is short for High Bit Depth - Mode DecisionS (hbd-md was already taken internally and using it caused some bugs). It controls the bit-depth at which internal operations are performed at. On Preset 2 and slower, it is ALWAYS on no matter what. 
+
+0 follows the default preset behavior, 1 forces 10-bit mode decision for everything, 2 is adaptive 8/10-bit mode decision based on the scenario, 3 is always 8-bit.
+
+Default is **0**, following default preset behavior.
+
+- `--complex-hvs`
+
+This is a new and very interesting setting, as it enables a higher complexity metric to be used for mode and transform decisions.
+When enabled, it switches from the low complexity VAR/SAD to the higher complexity SSD metric.
+When combined with `--psy-rd`, particularly at higher strengths, it can grearly increase visual quality.
+
+Normally, on presets faster than P-1, the default metric used is VAR (Variance). With high quality psy-rd enabled (`--psy-rd>=1.2`), the metric is changed
+from VAR to SAD (Sum of Absolute Deviations). Already, changing from VAR to the SAD metric increases the strength and quality of psy-rd.
+
+Setting `--complex-hvs 1` changes the metric used from SAD to SSD (Sum of Square Deviations). In other words, it's PSNR/SSE/MSE.
+
+By itself, it's honestly not worth the extra 20% encoding time that it brings. However, **when combined with psy-rd**, it significantly amplifies the strength of
+psy-rd to make it a much stronger more visually accurate metric; the difference it makes to visual quality in challenging scenarios is honestly mind-blowing.
+
+As some of you might have recognized, psy-rd combined with SSD makes for a low complexity version of PSNR-HVS.
+
+When using psy-rd on slower presets, Preset 6 and slower, it is heavily recommended to set `--complex-hvs 1` to optimize visual quality to the fullest.
+It is not recommended to set `--complex-hvs 1` on presets faster than 6.
+
+Default is **0**.
 
 
 ### Modified Defaults
 
-SVT-AV1-PSY has different defaults than mainline SVT-AV1 in order to provide better visual fidelity out of the box. They include:
+SVT-AV1-PSYEX has enhanced defaults versus mainline SVT-AV1 in order to provide better visual fidelity out of the box. They include:
 
 - Default 10-bit color depth when given a 10-bit input.
 - Disable film grain denoising by default, as it often harms visual fidelity. (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/commit/8b39b41df9e07bbcdbd19ea618762c5db3353c03)**)
 - Default to Tune 2 (SSIM) instead of Tune 1 (PSNR), as it reliably outperforms Tune 1 perceptually & throughout trusted metrics.
+**This might change in the very near future**.
 - Enable quantization matrices by default.
-- Set minimum QM level to 2 by default for more consistent performance than min QM level 0 doesn't offer.
+- Set minimum QM level to 4 by default for more consistent performance than min QM level 0 doesn't offer. It has been increased from 2 as the 4 provides the most balanced gains overall
 - Set minimum chroma QM level to 8 by default to prevent the encoder from picking suboptimal chroma QMs.
 - `--enable-variance-boost` enabled by default.
 - `--keyint -2` (the default) uses a ~10s GOP size instead of ~5s.
 - `--sharpness 1` by default to prioritize encoder sharpness.
-- Sharp transform optimizations (`--sharp-tx 1`) are enabled by default to supercharge svt-av1-psy psy-rd optimizations. It is recommended to disable it if you don't use `--psy-rd`, which is set to 0.5 by default.
+- Sharp transform optimizations (`--sharp-tx 1`) are enabled by default to supercharge svt-av1-psy psy-rd optimizations. It is recommended to disable it if you don't use `--psy-rd`, which is set to **1.0** by default.
 - `--tf-strength 1` by default for much lower alt-ref temporal filtering to decrease blur for cleaner encoding.
 - `--kf-tf-strength 1` controls are available to the user and are set to 1 by default to remove KF artifacts.
 
