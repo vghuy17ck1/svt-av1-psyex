@@ -197,7 +197,9 @@ Default is **0**.
 This setting controls the noise detection algorithm that turns off CDEF/restoration filtering if the noise level is high enough; this feature is enabled by default
 if you use tune 0/tune 3. By popular request, a member of our community has decided to add this setting to improve visual appeal on less demanding content.
 
-The default is 0, which follows default tuning decisions.
+0 follows the default tune behavior, 1 enables noise detection, 2 disables noise detection, 3 enables noise detection for CDEF only, and 4 enables noise detection for restoration only.
+
+Default is **0**.
 
 
 ### Modified Defaults
