@@ -21,14 +21,14 @@ To be filled once I come back from doing groceries and getting my competent sold
 
 - `--variance-boost-strength` *1 to 4* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2195)**)
 
-Provides control over our augmented AQ Modes 0 and 2 which can utilize variance information in each frame for more consistent quality under high/low contrast scenes. Four cruve strength options are provided, and the default is strength **2**; 1: mild, 2: gentle, 3: medium, 4: aggressive
+Provides control over our augmented AQ Modes 0 and 2 which can utilize variance information in each frame for more consistent quality under high/low contrast scenes. Four curve strength options are provided, and the default is strength **2**; 1: mild, 2: gentle, 3: medium, 4: aggressive
 
 - `--variance-octile` *1 to 8* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2195)**)
 
 Controls how "selective" the algorithm is when boosting superblocks, based on their low/high 8x8 variance ratio. A value of 1 is the least selective, and will readily boost a superblock if only 1/8th of the superblock is low variance. Conversely, a value of 8 will only boost if the *entire* superblock is low variance. Lower values increase bitrate. 
 The default value is **6**.
 
-- `--variance-boost-cruve` *0 to 2* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
+- `--variance-boost-curve` *0 to 2* (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/merge_requests/2357)**)
 
 Enable an alternative variance boost curve, with different bit allocation and visual characteristics. The default is 0.
 A 3rd curve `--variance-boost-curve 3` will be added in the next release for HDR content.
@@ -192,7 +192,7 @@ It is not recommended to set `--complex-hvs 1` on presets faster than 6.
 
 Default is **0**.
 
-`--filtering-noise-detection`
+- `--filtering-noise-detection`
 
 This setting controls the noise detection algorithm that turns off CDEF/restoration filtering if the noise level is high enough; this feature is enabled by default
 if you use tune 0/tune 3. By popular request, a member of our community has decided to add this setting to improve visual appeal on less demanding content.
@@ -211,7 +211,7 @@ SVT-AV1-PSYEX has enhanced defaults versus mainline SVT-AV1 in order to provide 
 - Default to Tune 2 (SSIM) instead of Tune 1 (PSNR), as it reliably outperforms Tune 1 perceptually & throughout trusted metrics.
 **This might change in the very near future**.
 - Enable quantization matrices by default.
-- Set minimum QM level to 4 by default for more consistent performance than min QM level 0 doesn't offer. It has been increased from 2 as the 4 provides the most balanced gains overall
+- Set minimum QM level to 4 by default for more consistent performance that min QM level 0 doesn't offer. It has been increased from 2, as 4 provides the most balanced gains overall.
 - Set minimum chroma QM level to 8 by default to prevent the encoder from picking suboptimal chroma QMs.
 - `--enable-variance-boost` enabled by default.
 - `--keyint -2` (the default) uses a ~10s GOP size instead of ~5s.
