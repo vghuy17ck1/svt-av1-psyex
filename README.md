@@ -4,18 +4,57 @@ Since the original SVT-AV1-PSY project was sunset because Gianni couldn't work o
 
 As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended with advanced perceptual improvements, additions and tuning for psychovisually optimal media encoding. The goal is to create the best encoding implementation for perceptual quality with AV1. We may or may not implement bleeding edge features, optimizations and even extend mainline features beyond their intended purpose.
 
-# For HDR content, I recommend using SVT-AV1-HDR for now: https://github.com/juliobbv-p/svt-av1-hdr/
 
+### Recommended general settings for 5 use cases, with a BlueSwordM bonus
 
-### Recommended general settings for 3 use cases 
+For further explanations into most of the advanced parameters that aren't present in mainline svt-av1, you can read below in the features addition section.
 
-To be filled once I come back from doing groceries and getting my competent soldering iron station
+Important caveat: for the written recommendations written below, we assume that you're using Preset 6 and slower. Ideally, Preset 1-4 should be used for maximum
+visual performance.
 
 - `High Fidelity (Demanding content, higher bitrates for live-action/CG/demanding animu)`
 
+`--preset X --complex-hvs 1 --crf XX --enable-cdef 0 --noise-norm-strength 3 --enable-qm 1 --qm-min 8 --qm-max 15 --chroma-qm-min 10 --chroma-qm-max 15 --keyint 240 --tune 0 --sharpness 1 --aq-mode 2 --qp-scale-compress-strength 2 --scm 0 --kf-tf-strength 1 --tf-strength 1 --psy-rd 3.0 --variance-boost-strength 2`
+
+This settings string is mainly targeted at those that want high encoding fidelity for demanding content, mostly aimed at detailed content with a nice amount
+of noise/grain/shadow/high frequency detail. This doesn't go too overboard with aggressive settings. If you want slightly more detail, you can add `--spy-rd 2`.
+
+- `Grainy Fidelity (you want to retain that grain at any cost? This is for you, but please, play with the settings until you find what's best for you)`
+
+`--preset X --complex-hvs 1 --crf XX --enable-cdef 0 --enable-restoration 0 --enable-tf 0 --spy-rd 1 --noise-norm-strength 3 --enable-qm 1 --qm-min 10 --qm-max 15 --chroma-qm-min 12 --chroma-qm-max 15 --keyint 240 --tune 0 --sharpness 1 --aq-mode 2 --qp-scale-compress-strength 3 --scm 0 --psy-rd 4.0 --variance-boost-strength 2`
+
+Simple and to the point: we want to minimize any kind of grain variation, even if it forces the encoder to use lower quantizers and blow up bitrate.
+For even better grain retention, you can sacrifice some consistency by setting `--variance-boost-strength 1`; that will "reserve" some data for higher frequency areas, which are usually grainy areas. Since we're after maximum consistency as well, setting `--variance-octile 5` should also help with preserving grainy texture
+around tones areas (around edges, not edges themselves).
+
 - `Medium Fidelity (Less demanding content, medium bitrates)`
 
+`--preset X --complex-hvs 1 --crf XX --kf-tf-strength 1 --tf-strength 1 --noise-norm-strength 1 --enable-qm 1 --qm-min 4 --qm-max 15 --chroma-qm-min 10 --chroma-qm-max 15 --keyint 240 --tune 0 --sharpness 1 --filtering-noise-detection 4 --aq-mode 2 --qp-scale-compress-strength 1 --scm 0 --psy-rd 2.0 --variance-boost-strength 2`
+
+I crank back some of the settings, including psy-rd as well as including `--filtering-noise-detection 4`, which enables restoration filtering at all times
+and tends to help improve image stability. CDEF is still disabled when noise levels are high, since its internal metric (MSE) to determine strength is still somewhat aggressive.
+
+- `Balance of Appeal and Fidelity`
+
+`--preset X --complex-hvs 1 --crf XX --kf-tf-strength 1 --tf-strength 1 --noise-norm-strength 1 --enable-qm 1 --qm-min 4 --qm-max 15 --chroma-qm-min 10 --chroma-qm-max 15 --keyint 240 --tune 0 --sharpness 1 --filtering-noise-detection 2 --aq-mode 2 --qp-scale-compress-strength 1 --scm 0 --psy-rd 1.5 --variance-boost-strength 2`
+
+Psy-rd influence is lowered further, and we disable the CDEF/restoration noise detection algorithm completely; this has the effect of enabling CDEF/restoration
+filtering at all times. This helps tip the balance much further into appeal to preserve those clean lines that most people prefer.
+
 - `High appeal (low bitrates, line preservation, sacrificing some high frequency detail)`
+
+`--preset X --complex-hvs 1 --crf XX --kf-tf-strength 1 --tf-strength 3 --noise-norm-strength 1 --enable-qm 1 --qm-min 4 --qm-max 15 --chroma-qm-min 8 --chroma-qm-max 15 --keyint 240 --tune 1 --sharpness X --aq-mode 2 --qp-scale-compress-strength 1 --psy-rd 1.0 --sharp-tx 0 --variance-boost-strength 2`
+
+For maximum space savings, this settings string is geared towards more appealing output. We lower psy-rd influence further and disable sharp-tx to make the 
+output less crisp, but keeps artifacts to a minimum. `--psy-rd 1.0 --complex-hvs 1` is still being used to provide higher fidelity output, with the rest of the settings compensating their effects to result in more appealing output.
+
+- `BlueSwordM edition (a basis of what I tend to use as a tweakable base)`
+
+`--preset 2 --complex-hvs 1 --crf XX --lp 1 --enable-cdef 0 --noise-norm-strength 3 --enable-qm 1 --qm-min 8 --qm-max 15 --chroma-qm-min 10 --chroma-qm-max 15 --keyint 240 --tune 0 --sharpness 1 --aq-mode 2 --qp-scale-compress-strength 1 --scm 0 --kf-tf-strength 1 --tf-strength 1 --psy-rd 2.0 --variance-boost-strength 2`
+
+While the settings quoted above vary wildly from source to source (I use different settings for movies, episodic releases, and fast gameplay encodes), this is what I use as a basis to encode most of the content that I own. Do know that what I posted isn't very conservative and is biaised somewhat towards high fidelity.
+Variance-boost-strength is the only thing I tend to play with a lot, since some content greatly benefits from higher strength; decreasing octile from the default doesn't seem to help much in dark areas because of psy-rd's high influence combined with `--complex-hvs 1`. However, decreasing it to `--variance-octile 5` can help
+in more varied encoding scenarios, so try it out if you wish to do so.
 
 ### Feature Additions
 
@@ -236,6 +275,8 @@ We are always continuously improving SVT-AV1-PSY, and we always recommend using 
 - `Enhanced Content Detection`
 
 Tune 4 features a smarter content detection algorithm to optimize the encoder for either screen or photographic content based on the image. This helps Tune 4 achieve better visual fidelity on still images.
+
+# For a diferent take on encoding, I recommend trying out SVT-AV1-HDR: https://github.com/juliobbv-p/svt-av1-hdr/
 
 # Building
 
