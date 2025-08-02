@@ -120,6 +120,7 @@ The default is **1**, a conservative setting for most content.
 
 Enables a more accurate loop filter that prevents blocking, for a modest increase in compute time (most noticeable at presets 7 to 9).
 This stops being useful at **Preset 3**.
+
 The default is **1, which is based on the preset**.
 
 - `Higher-quality presets for 8K and 16K`
@@ -194,6 +195,7 @@ always choose more aggressive chroma quantization matrices.
 - `--low-q-taper`
 
 This setting prevents the encoder from choosing extremely low quantizers for blocks/keyframes, tapering off the quantizers chosen below q11; this can greatly increase efficiency at very low CRF. Original explanation: "Low q taper. If macroblocks are boosted below q11, taper the effect"
+
 Default is **0**.
 
 - `--sharp-tx`
