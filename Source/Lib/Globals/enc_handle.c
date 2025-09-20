@@ -3289,7 +3289,7 @@ static void derive_vq_params(SequenceControlSet* scs) {
         vq_ctrl->stability_ctrls.depth_refinement = 0;
     }
 
-    switch (scs->static_config.filtering_noise_detection) {
+    switch (scs->static_config.noise_adaptive_filtering) {
         case 0:
             break;
         case 1:
@@ -4663,8 +4663,8 @@ static void copy_api_from_app(
     // Complex HVS
     scs->static_config.complex_hvs = config_struct->complex_hvs;
 
-    // Filtering noise detection
-    scs->static_config.filtering_noise_detection = config_struct->filtering_noise_detection;
+    // Noise adaptive filtering
+    scs->static_config.noise_adaptive_filtering = config_struct->noise_adaptive_filtering;
 
     // Override settings for Still Picture tune
     if (scs->static_config.tune == 4) {

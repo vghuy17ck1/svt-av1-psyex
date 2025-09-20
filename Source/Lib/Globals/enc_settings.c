@@ -943,8 +943,8 @@ EbErrorType svt_av1_verify_settings(SequenceControlSet *scs) {
         return_error = EB_ErrorBadParameter;
     }
 
-    if (config->filtering_noise_detection > 4) {
-        SVT_ERROR("Instance %u: filtering-noise-detection must be between 0 and 4\n", channel_number + 1);
+    if (config->noise_adaptive_filtering > 4) {
+        SVT_ERROR("Instance %u: noise-adaptive-filtering must be between 0 and 4\n", channel_number + 1);
         return_error = EB_ErrorBadParameter;
     }
     
@@ -1111,7 +1111,7 @@ EbErrorType svt_av1_set_default_params(EbSvtAv1EncConfiguration *config_ptr) {
     config_ptr->sharp_tx                          = 1;
     config_ptr->hbd_mds                           = 0;
     config_ptr->complex_hvs                       = 0;
-    config_ptr->filtering_noise_detection         = 2;
+    config_ptr->noise_adaptive_filtering          = 2;
     return return_error;
 }
 static const char *tier_to_str(unsigned in) {
@@ -1280,20 +1280,20 @@ void svt_av1_print_lib_params(SequenceControlSet *scs) {
                     config->low_q_taper ? "On" : "Off");
         }
         
-        switch (config->filtering_noise_detection) {
+        switch (config->noise_adaptive_filtering) {
             case 0:
                 break;
             case 1:
-                SVT_INFO("SVT [config]: filtering noise detection \t\t\t\t\t: on\n");
+                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: on\n");
                 break;
             case 2:
-                SVT_INFO("SVT [config]: filtering noise detection \t\t\t\t\t: off\n");
+                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: off\n");
                 break;
             case 3:
-                SVT_INFO("SVT [config]: filtering noise detection \t\t\t\t\t: on (CDEF only)\n");
+                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: on (noise-adaptive CDEF only)\n");
                 break;
             case 4:
-                SVT_INFO("SVT [config]: filtering noise detection \t\t\t\t\t: on (restoration only)\n");
+                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: on (noise-adaptive restoration only)\n");
                 break;
             default:
                 break;
@@ -2183,7 +2183,7 @@ EB_API EbErrorType svt_av1_enc_parse_parameter(EbSvtAv1EncConfiguration *config_
         {"hbd-mds", &config_struct->hbd_mds},
         {"sharp-tx", &config_struct->sharp_tx},
         {"complex-hvs", &config_struct->complex_hvs},
-        {"filtering-noise-detection", &config_struct->filtering_noise_detection},
+        {"noise-adaptive-filtering", &config_struct->noise_adaptive_filtering},
     };
     const size_t uint8_opts_size = sizeof(uint8_opts) / sizeof(uint8_opts[0]);
 
