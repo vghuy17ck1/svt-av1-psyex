@@ -3291,15 +3291,15 @@ static void derive_vq_params(SequenceControlSet* scs) {
 
     switch (scs->static_config.noise_adaptive_filtering) {
         case 0:
+            vq_ctrl->sharpness_ctrls.cdef = 0;
+            vq_ctrl->sharpness_ctrls.restoration = 0;
             break;
         case 1:
             vq_ctrl->sharpness_ctrls.cdef = 1;
             vq_ctrl->sharpness_ctrls.restoration = 1;
             break;
         case 2:
-            vq_ctrl->sharpness_ctrls.cdef = 0;
-            vq_ctrl->sharpness_ctrls.restoration = 0;
-            break;
+            break; 
         case 3:
             vq_ctrl->sharpness_ctrls.cdef = 1;
             vq_ctrl->sharpness_ctrls.restoration = 0;

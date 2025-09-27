@@ -1111,7 +1111,7 @@ EbErrorType svt_av1_set_default_params(EbSvtAv1EncConfiguration *config_ptr) {
     config_ptr->sharp_tx                          = 1;
     config_ptr->hbd_mds                           = 0;
     config_ptr->complex_hvs                       = 0;
-    config_ptr->noise_adaptive_filtering          = 2;
+    config_ptr->noise_adaptive_filtering          = 0;
     return return_error;
 }
 static const char *tier_to_str(unsigned in) {
@@ -1282,12 +1282,12 @@ void svt_av1_print_lib_params(SequenceControlSet *scs) {
         
         switch (config->noise_adaptive_filtering) {
             case 0:
+                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: off\n");
                 break;
             case 1:
                 SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: on\n");
                 break;
             case 2:
-                SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: off\n");
                 break;
             case 3:
                 SVT_INFO("SVT [config]: noise adaptive filtering \t\t\t\t\t: on (noise-adaptive CDEF only)\n");

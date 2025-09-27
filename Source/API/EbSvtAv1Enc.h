@@ -1066,9 +1066,9 @@ typedef struct EbSvtAv1EncConfiguration {
 
      /**
      * @brief Controls noise detection for CDEF/restoration filtering
-     * 0: default tune behavior
+     * 0: off
      * 1: always-on noise-adaptive filters
-     * 2: off
+     * 2: default tune behavior
      * 2: noise-adaptive CDEF only
      * 3: noise-adaptive restoration filtering only
      * Default is 0

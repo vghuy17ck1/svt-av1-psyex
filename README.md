@@ -10,13 +10,13 @@ As such, SVT-AV1-PSYEX is the Scalable Video Technology Psychovisually Extended 
 Compared to previous SVT-AV1-PSYEX versions, svt-av1-psyex 3.0.2-B has superior default settings. The main change relates to the visual tune: tune 0 has been made default in place of tune 1.
 This has been done to improve visual quality on the side of fidelity. However, just changing the default from tune 1 to tune 0 would have increased encoding artifacts considerably. 
 
-For this reason, I set `--noise-adaptive-filtering 2` by default, which disables noise-adaptive CDEF and restoration filters. This restores original CDEF and restoration filter applications similar to tune 1/tune 2.
+For this reason, I set `--noise-adaptive-filtering 0` by default, which disables noise-adaptive CDEF and restoration filters. This restores original CDEF and restoration filter applications similar to tune 1/tune 2.
 
 Normally in tune 0/3, noise-adaptive CDEF and restoration filters are enabled: if noise levels are high enough, CDEF and restoration filtering get completely disabled. This has the effect of increasing sharpness levels quite a bit in some scenarios.
 
 However, at lower bitrates and for lots of 2D animated content, completely disabling those filters when there's just a bit of noise, can wreck image stability and/or quality around lines. In the past with previous svt-av1 and svt-av1-psy, this tradeoff was worth it since there weren't other ways to boost image quality; today is a completely different story with much more powerful psychovisual options.
 
-This allowed us to set `--tune 0 --noise-adaptive-filtering 2` and still get higher visual quality than the previously set `--tune 1` in svt-av1-psyex 3.0.2-A in almost all encoding scenarios as well!
+This allowed us to set `--tune 0 --noise-adaptive-filtering 0` and still get higher visual quality than the previously set `--tune 1` in svt-av1-psyex 3.0.2-A in almost all encoding scenarios as well!
 
 If you want previous tune 0 behavior, you can set `--noise-adaptive-filters 1`. **Do note that 1 enables both noise-adaptive CDEF and restoration filtering at all times**, _for all presets_. `--noise-adaptive-filtering 1` can be forced to all tunes, which can be useful if you want to make `--tune 2` behave more closely to `--tune 3`.
 
@@ -257,14 +257,15 @@ Default is **0**.
 This setting controls the noise detection algorithm that turns off CDEF/restoration filtering if the noise level is high enough; this feature is enabled by default
 if you use tune 0/tune 3. By popular request, a member of our community has decided to add this setting to improve visual appeal on less demanding content.
 
-0 follows default tune behavior, 1  enables noise adaptive CDEF and restoration filters.
+0 forcefully disables the noise-adaptive CDEF/restoration filters, resulting in CDEF/restoration filtering always being on.
+1 enables noise adaptive CDEF and restoration filters.
 
-2 forcefully disables the noise-adaptive CDEF/restoration filters, resulting in CDEF/restoration filtering always being on.
+2 follows default tune beavior
 
 3 only enables noise-adaptive filtering for CDEF, forcing restoration filtering at all times.
 4 only enables noise-adaptive filtering for restoration, enabling CDEF at all times.
 
-Default is **2** to improve the appeal of tune 0.
+Default is **0** to improve the appeal of tune 0.
 
 
 ### Modified Defaults
@@ -275,7 +276,7 @@ SVT-AV1-PSYEX has enhanced defaults versus mainline SVT-AV1 in order to provide 
 - Disable film grain denoising by default, as it often harms visual fidelity. (**[Merged to Mainline](https://gitlab.com/AOMediaCodec/SVT-AV1/-/commit/8b39b41df9e07bbcdbd19ea618762c5db3353c03)**)
 - Enable quantization matrices by default through `--enable-qm 1`
 - `--tune 0` has been enabled for higher quality encodes by default
-- `--noise-adaptive-filtering 2` has been enabled to balance the sharpness from tune 0 while still allowing for higher sharpness than tune 1.
+- `--noise-adaptive-filtering 0` has been enabled to balance the sharpness from tune 0 while still allowing for higher sharpness than tune 1.
 - Set `--qm-min 4` by default for more consistent performance that min QM level 0 doesn't offer. It has been increased from 2, as 4 provides the most balanced gains overall.
 - `--chroma-qm-min 10` has been set by default to greatly increase chroma quality, as the encoder will tend to pick too low chroma QMs otherwise.
 - `--enable-variance-boost 1` enabled by default.
