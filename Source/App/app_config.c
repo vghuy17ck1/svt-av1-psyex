@@ -1270,7 +1270,7 @@ ConfigEntry config_entry_variance_boost[] = {
     // Adaptive film grain
     {SINGLE_INPUT, ADAPTIVE_FILM_GRAIN_TOKEN, "[PSY] Adapts film grain blocksize based on video resolution, default is 1 [0-1]", set_cfg_generic_token},
     // Min/max chroma qm
-    {SINGLE_INPUT, MIN_CHROMA_QM_LEVEL_TOKEN, "[PSY] Min chroma quant matrix flatness, default is 8 [0-15]", set_cfg_generic_token},
+    {SINGLE_INPUT, MIN_CHROMA_QM_LEVEL_TOKEN, "[PSY] Min chroma quant matrix flatness, default is 10 [0-15]", set_cfg_generic_token},
     {SINGLE_INPUT, MAX_CHROMA_QM_LEVEL_TOKEN, "[PSY] Max chroma quant matrix flatness, default is 15 [0-15]", set_cfg_generic_token},
     //Noise normalisation strength
     {SINGLE_INPUT, NOISE_NORM_STRENGTH_TOKEN, "[PSY] Noise normalization strength, default is 1; recommended value for tune 3 is 3 [0-4]", set_cfg_generic_token},
@@ -1289,7 +1289,7 @@ ConfigEntry config_entry_variance_boost[] = {
     //Complex HVS
     {SINGLE_INPUT, COMPLEX_HVS_TOKEN, "[PSY] Enable highest complexity HVS model, default is 0 [0: default preset behavior, 1: complex HVS model based on PSNR-HVS]", set_cfg_generic_token},
     //Noise adaptive filtering
-    {SINGLE_INPUT, NOISE_ADAPTIVE_FILTERING_TOKEN, "[PSY] Control noise detection for CDEF/restoration filtering, default is 0 to make tune 0/3 more balanced [0: off, 1: both CDEF and restoration noise-adaptive filtering are on, 2: default tune behavior, 3: noise-adaptive CDEF only, 4: noise-adaptive restoration only)]", set_cfg_generic_token},
+    {SINGLE_INPUT, NOISE_ADAPTIVE_FILTERING_TOKEN, "[PSY] Control noise detection for CDEF/restoration filtering, default is 0 to make tune 0/3 more balanced and less sharp [0: off, 1: both CDEF and restoration noise-adaptive filtering are on, sharper 2: default tune behavior, 3: noise-adaptive CDEF only, 4: noise-adaptive restoration only)]", set_cfg_generic_token},
     // Termination
     {SINGLE_INPUT, NULL, NULL, NULL}};
 
